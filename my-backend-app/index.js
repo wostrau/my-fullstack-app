@@ -1,18 +1,6 @@
-let http = require('http')
-const { addUser, getUsers, getLessons } = require('./repository')
+const http = require('http')
+const {usersController} = require("./usersController");
 
-let data = {
-    users: [
-        {"id": 1, "name": "Tony"},
-        {"id": 2, "name": "Ezekiel"},
-        {"id": 3, "name": "Polly"}
-    ],
-    lessons: [
-        {"id": 1, "title": "Native JS"},
-        {"id": 2, "title": "React JS"},
-        {"id": 3, "title": "Node JS"}
-    ]
-}
 
 let setCorsHeaders = (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
@@ -27,7 +15,7 @@ let setCorsHeaders = (req, res) => {
     return false
 }
 
-let server = http.createServer((req, res)=>{
+let server = http.createServer((req, res) => {
 
     if (setCorsHeaders(req, res)) return
 
@@ -35,19 +23,15 @@ let server = http.createServer((req, res)=>{
 
     switch (req.url) {
         case '/users':
-            if (req.method === 'POST') {
-                addUser('Corey')
-                res.write(JSON.stringify({success: true}))
-            } else res.write(JSON.stringify(getUsers()))
+            usersController(req, res)
             break
         case '/lessons':
-            res.write(JSON.stringify(getLessons()))
+            usersController(req, res)
             break
         default:
             res.write('PAGE NOT FOUND')
+            res.end()
     }
-
-    res.end()
 })
 
 server.listen(7542)

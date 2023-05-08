@@ -1,9 +1,11 @@
+const fs = require('fs')
+
 let data = {
-    users: [
+    /*users: [
         {"id": 1, "name": "Tony"},
         {"id": 2, "name": "Ezekiel"},
         {"id": 3, "name": "Polly"}
-    ],
+    ],*/
     lessons: [
         {"id": 1, "title": "Native JS"},
         {"id": 2, "title": "React JS"},
@@ -12,7 +14,13 @@ let data = {
 }
 
 const getUsers = () => {
-    return data.users
+    const promise = new Promise((resolve, reject) => {
+        fs.readFile('users.json', (err, buf) => {
+            const users = buf.toString()
+            resolve(users)
+        })
+    })
+    return promise
 }
 
 const addUser = (name) => {
