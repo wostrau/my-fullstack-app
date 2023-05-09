@@ -1,7 +1,7 @@
-const fs = require('fs')
+const {readJsonFromFile, writeJsonToFile} = require("./fs-utils");
 
 let data = {
-    /*users: [
+    /*users.json: [
         {"id": 1, "name": "Tony"},
         {"id": 2, "name": "Ezekiel"},
         {"id": 3, "name": "Polly"}
@@ -13,18 +13,14 @@ let data = {
     ]
 }
 
-const getUsers = () => {
-    const promise = new Promise((resolve, reject) => {
-        fs.readFile('users.json', (err, buf) => {
-            const users = buf.toString()
-            resolve(users)
-        })
-    })
-    return promise
-}
+const getUsers = () => readJsonFromFile('users.json')
 
-const addUser = (name) => {
-    data.users.push({id: Number(new Date()), name: name})
+const addUser = async (name) => {
+    const usersBuffer = await getUsers()
+    const users = JSON.parse(usersBuffer.toString())
+    users.push({id: Number(new Date()), name: name})
+
+    return writeJsonToFile('users.json', users)
 }
 
 const getLessons = () => {

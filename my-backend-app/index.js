@@ -3,10 +3,10 @@ const {usersController} = require("./usersController");
 
 
 let setCorsHeaders = (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*')
-    res.setHeader('Access-Control-Request-Method', '*')
-    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET')
-    res.setHeader('Access-Control-Allow-Headers', '*')
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
+    res.setHeader('Access-Control-Allow-Credentials', 'true')
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
     if (req.method === 'OPTIONS') {
         res.writeHead(200)
         res.end()
@@ -15,11 +15,10 @@ let setCorsHeaders = (req, res) => {
     return false
 }
 
+
 let server = http.createServer((req, res) => {
 
     if (setCorsHeaders(req, res)) return
-
-    console.log('some request')
 
     switch (req.url) {
         case '/users':
