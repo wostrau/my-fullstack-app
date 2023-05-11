@@ -1,6 +1,34 @@
-const {addUser, getUsers, getLessons} = require("./repository")
+const {addUser, getUsers} = require("./repository")
+const express = require('express')
+const router = express.Router()
 
 
+router.get('/', async (req, res) => {
+    let users = await getUsers()
+
+    const searchValue = req.query.search.toLowerCase()
+    if (searchValue) users = users.filter(u => u.name.toLowerCase().indexOf(searchValue) > -1)
+    
+    res.send(JSON.stringify(users))
+})
+
+router.get('/:id', async (req, res) => {
+    const users = await getUsers()
+    let userId = req.params.id
+    const user = users.find(u => u.id === userId)
+    if (user) res.send(JSON.stringify(user))
+    else res.send(404)
+})
+
+router.post('/', async (req, res) => {
+    const name = req.params.name
+    const result = await addUser(name)
+    res.send(JSON.stringify({success: true}))
+})
+
+module.exports = router
+
+/*
 exports.usersController = async (req, res) => {
     switch (req.url) {
         case '/users':
@@ -29,4 +57,4 @@ exports.usersController = async (req, res) => {
             res.write('PAGE NOT FOUND')
             res.end()
     }
-}
+}*/
