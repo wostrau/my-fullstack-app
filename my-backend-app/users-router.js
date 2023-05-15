@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
 
     const searchValue = req.query.search.toLowerCase()
     if (searchValue) users = users.filter(u => u.name.toLowerCase().indexOf(searchValue) > -1)
-    
+
     res.send(JSON.stringify(users))
 })
 
@@ -22,7 +22,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const name = req.params.name
-    const result = await addUser(name)
+    await addUser(name)
     res.send(JSON.stringify({success: true}))
 })
 

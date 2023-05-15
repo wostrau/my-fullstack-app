@@ -5,7 +5,16 @@ const {getUsers, addUser} = require("./repository");
 const users = require('./users-router')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
 
+
+mongoose.connect('mongodb://localhost/users', {useNewUrlParser: true})
+
+const db = mongoose.connection
+db.on('error', console.error.bind(console, 'connection error:'))
+db.once('open', () => {
+    //we're connected!
+})
 
 const setCorsHeaders = (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')

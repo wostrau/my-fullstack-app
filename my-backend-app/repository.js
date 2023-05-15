@@ -1,4 +1,9 @@
 const {readJsonFromFile, writeJsonToFile} = require("./fs-utils");
+const mongoose = require("mongoose");
+
+const userSchema = new mongoose.Schema({name: String})
+const User = mongoose.model('User', userSchema)
+const user1 = new User({name: 'Dorothy'})
 
 let data = {
     /*users.json: [
@@ -16,11 +21,14 @@ let data = {
 const getUsers = () => readJsonFromFile('users.json')
 
 const addUser = async (name) => {
-    const usersBuffer = await getUsers()
+    const newUser = new User({name: name})
+    return newUser.save()
+
+    /*const usersBuffer = await getUsers()
     const users = JSON.parse(usersBuffer.toString())
     users.push({id: Number(new Date()), name: name})
 
-    return writeJsonToFile('users.json', users)
+    return writeJsonToFile('users.json', users)*/
 }
 
 const getLessons = () => {
