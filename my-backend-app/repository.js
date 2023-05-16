@@ -1,9 +1,9 @@
-const {readJsonFromFile, writeJsonToFile} = require("./fs-utils");
+//const {readJsonFromFile, writeJsonToFile} = require("./fs-utils");
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({name: String})
 const User = mongoose.model('User', userSchema)
-const user1 = new User({name: 'Dorothy'})
+//const user1 = new User({name: 'Dorothy'})
 
 let data = {
     /*users.json: [
@@ -18,9 +18,18 @@ let data = {
     ]
 }
 
-const getUsers = () => readJsonFromFile('users.json')
+const getUsers = (search) => {
+    if (search) User.find({name: new RegExp(search)})
+    else return User.find()
 
-const addUser = async (name) => {
+    //return readJsonFromFile('users.json')
+}
+
+const getUser = (userId) => {
+    return User.find({_id: userId})
+}
+
+const addUser = (name) => {
     const newUser = new User({name: name})
     return newUser.save()
 
@@ -31,10 +40,21 @@ const addUser = async (name) => {
     return writeJsonToFile('users.json', users)*/
 }
 
+const deleteUser = (userId) => {
+    return User.deleteOne({_id: userId})
+}
+
+const updateUser = (userId, userName) => {
+    return User.updateOne({_id: userId}, {name: userName})
+}
+
 const getLessons = () => {
     return data.lessons
 }
 
 exports.getUsers = getUsers
+exports.getUser = getUser
 exports.addUser = addUser
+exports.deleteUser = deleteUser
+exports.updateUser = updateUser
 exports.getLessons = getLessons

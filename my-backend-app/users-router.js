@@ -1,4 +1,4 @@
-const {addUser, getUsers} = require("./repository")
+const {addUser, getUsers, deleteUser, updateUser} = require("./repository")
 const express = require('express')
 const router = express.Router()
 
@@ -13,17 +13,37 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:id', async (req, res) => {
-    const users = await getUsers()
-    let userId = req.params.id
-    const user = users.find(u => u.id === userId)
-    if (user) res.send(JSON.stringify(user))
+    const userId = req.params.id
+    const user = await getUsers(userId)
+
+    if (user) res.send(user)
     else res.send(404)
 })
 
 router.post('/', async (req, res) => {
-    const name = req.params.name
-    await addUser(name)
-    res.send(JSON.stringify({success: true}))
+    const userName = req.body.name
+
+    await addUser(userName)
+
+    res.send({success: true})
+})
+
+router.delete('/:id', async (req, res) => {
+    const userId = req.params.id
+
+    const user = await deleteUser(userId)
+
+    if (user) res.send({success: true})
+    else res.send(404)
+})
+
+router.put('/', async (req, res) => {
+    const userId = req.body.id
+    const userName = req.body.name
+
+    await updateUser(userId, userName)
+
+    res.send({success: true})
 })
 
 module.exports = router
